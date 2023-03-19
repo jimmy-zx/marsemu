@@ -3,34 +3,48 @@
 
 #include <stdint.h>
 
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-#define PSF1_FONT_MAGIC 0x0436
-#else
-#define PSF1_FONT_MAGIC 0x3604
-#endif
+#define PSF1_MAGIC0     0x36
+#define PSF1_MAGIC1     0x04
 
+#define PSF1_MODE512    0x01
+#define PSF1_MODEHASTAB 0x02
+#define PSF1_MODEHASSEQ 0x04
+#define PSF1_MAXMODE    0x05
 
-typedef struct {
-  uint16_t magic;        // Magic bytes for idnetiifcation.
-  uint8_t fontMode;      // PSF font mode
-  uint8_t characterSize; // PSF character size.
-} PSF1_Header;
+#define PSF1_SEPARATOR  0xFFFF
+#define PSF1_STARTSEQ   0xFFFE
 
-#define PSF_FONT_MAGIC 0x864ab572
+struct psf1_header {
+        unsigned char magic[2];     /* Magic number */
+        unsigned char mode;         /* PSF font mode */
+        unsigned char charsize;     /* Character size */
+};
 
-typedef struct {
-  uint32_t magic;         /* magic bytes to identify PSF */
-  uint32_t version;       /* zero */
-  uint32_t headersize;    /* offset of bitmaps in file, 32 */
-  uint32_t flags;         /* 0 if there's no unicode table */
-  uint32_t numglyph;      /* number of glyphs */
-  uint32_t bytesperglyph; /* size of each glyph */
-  uint32_t height;        /* height in pixels */
-  uint32_t width;         /* width in pixels */
-} PSF_font;
-
+/**
+ * Initializes the psf context from a psf font file.
+ * <p>
+ * Only PSF1 files are supported.
+ *
+ * @param psffile an null-terminated string representing the path to
+ *                the psf font file
+ * @return        0 if successful, 1 if failed
+ */
 int psf_init(const char *psffile);
-void psf_plot(int ch, int x, int y, uint32_t color);
+
+/**
+ * De-initializes the psf context.
+ */
 void psf_deinit();
+
+/**
+ * Draw a character to the framebuffer
+ *
+ * @param ch    the unicode representation of the character
+ * @param x     the x-coordinate of the top-left corner
+ * @param y     the y-coordinate of the top-left corner
+ * @param color the color of the character in 24-bit RGB format
+ * @return      0 if the character has been successfully drawn, otherwise 1
+ */
+int psf_drawfont(uint16_t ch, uint32_t x, uint32_t y, uint32_t color);
 
 #endif  // PSF_H_

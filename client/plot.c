@@ -9,27 +9,33 @@
 #include "plot.h"
 
 static int shmid;
-static char *mem;
+char *plot_mem = NULL;
 
-int plotinit() {
+int plot_init() {
   key_t key = ftok(MEM_KEYPATH, MEM_KEYID);
   if ((shmid = shmget(key, kWindowBufferSize, 0666)) < 0) {
     perror("shmget");
     return 1;
   }
-  if ((mem = shmat(shmid, NULL, 0)) == (void *)-1) {
+  if ((plot_mem = shmat(shmid, NULL, 0)) == (void *)-1) {
     perror("shmat");
     return 1;
   }
   return 0;
 }
 
-void plot(int x, int y, uint32_t color) {
-  *(uint32_t *)(mem + x * kPixelBytes + y * kWidth * kPixelBytes) = color;
-}
-
-void plotdeinit() {
-  if (shmdt(mem) == -1) {
+void plot_deinit() {
+  if (plot_mem != (void *)-1 && plot_mem != NULL && shmdt(plot_mem) == -1) {
     perror("shmdt");
   }
+}
+
+int plot_draw(uint32_t x, uint32_t y, uint32_t color) {
+#ifndef PLOT_NOCHECK
+  if (x >= kWidth || y >= kHeight) {
+    return 0;
+  }
+#endif
+  *(uint32_t *)(plot_mem + x * kPixelBytes + y * kWidth * kPixelBytes) = color;
+  return 1;
 }

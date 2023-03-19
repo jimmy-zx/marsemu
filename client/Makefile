@@ -1,5 +1,10 @@
-CC=mips-linux-gnu-gcc
+CFLAGS?=-std=gnu11 -Wall -Wpedantic -Wextra -g
 
-CFLAGS=-std=gnu11 -Wall -Wpedantic -Wextra -g -static
+OBJS=plot.o psf.o
 
-all: plot.o psf.o
+.PHONY: clean
+
+all: $(OBJS)
+
+clean:
+	-rm -f $(OBJS)
