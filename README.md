@@ -12,6 +12,22 @@ Tested under x86 and qemu-mips.
 - [ ] Server: keyboard
 - [ ] Client: keyboard
 
+## Architecture
+
+```
++----------+     +----------------+         +----------------------------+
+| X Server | <-> | MARSEMU Server | <-SHM-> | QEMU-user                  |
++----------+     +----------------+         | +------------------------+ |
+                                            | | MARSEMU Client Library | |
+                                            | +------------------------+ |
+                                            |            ||              |
+                                            | +------------------------+ |
+                                            | | MIPS Program           | |
+                                            | +------------------------+ |
+                                            +----------------------------+
+
+```
+
 ## References:
 
 - Xlib
