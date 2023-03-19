@@ -28,7 +28,7 @@ int main() {
     for (int x = 0; x < kWidth; x++) {
       unsigned int *p = (unsigned int *) (row + (x * kPixelBytes));
       if (x % 16 && y % 16) {
-        *p = 0xffffffff;
+        *p = 0xffffff;
       } else {
         *p = 0;
       }
