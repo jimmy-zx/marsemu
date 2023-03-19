@@ -1,7 +1,7 @@
-CFLAGS=-std=gnu11 -Wall -Wpedantic -Wextra -g
+BUILDDIR?=.
 
-server: server.c
-	$(CC) $(CFLAGS) -o server server.c -lX11 -lXext
+$(BUILDDIR)/server: server.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $^ -lX11 -lXext
 
 clean:
-	-rm -f server
+	-rm -f $(BUILDDIR)/server

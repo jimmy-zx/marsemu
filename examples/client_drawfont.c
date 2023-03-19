@@ -2,7 +2,7 @@
 #include "../client/psf.h"
 
 int main() {
-  if (plotinit() != 0) {
+  if (plot_init() != 0) {
     return 1;
   }
   if (psf_init("./bin/Lat15-Terminus16.psf") != 0) {
@@ -10,5 +10,5 @@ int main() {
   }
   psf_plot('C', 0, 0, 0xffffff);
   psf_deinit();
-  plotdeinit();
+  plot_deinit();
 }

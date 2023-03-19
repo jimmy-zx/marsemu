@@ -32,7 +32,7 @@ void plot_deinit() {
 
 int plot_draw(uint32_t x, uint32_t y, uint32_t color) {
 #ifndef PLOT_NOCHECK
-  if (x >= kWidth || y >= kHeight) {
+  if (x >= (uint32_t)kWidth || y >= (uint32_t)kHeight) {
     return 0;
   }
 #endif

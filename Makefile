@@ -1,13 +1,24 @@
-.PHONY: clean server client
+CFLAGS?=-std=gnu11 -Wall -Wpedantic -Wextra -g
+export
+BUILDDIR?=build
+MIPSCC=mips-linux-gnu-gcc
 
-all: server client
+.PHONY: client mipsclient server builddir
 
-server:
-	$(MAKE) -C ./server
+all: mipsclient server
 
-client:
-	$(MAKE) -C ./client
+builddir:
+	-mkdir -p $(BUILDDIR)
+	-mkdir -p $(BUILDDIR)/mips
+
+client: builddir
+	BUILDDIR=../$(BUILDDIR) make -C client
+
+mipsclient: builddir
+	BUILDDIR=../$(BUILDDIR)/mips CC=$(MIPSCC) make -C client
+
+server: builddir
+	BUILDDIR=../$(BUILDDIR) make -C server
 
 clean:
-	$(MAKE) -C ./server clean
-	$(MAKE) -C ./client clean
+	BUILDDIR=../$(BUILDDIR) make -C client clean

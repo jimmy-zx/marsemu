@@ -12,7 +12,6 @@ all: $(TARGET)
 
 client_drawline: client_drawline.c ../client/plot.o
 
-
 .PHONY: clean
 
 clean:
