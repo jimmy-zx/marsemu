@@ -1,2 +1,4 @@
 shm_putimage
 xlib_shmimage
+client_drawline
+client_drawfont
