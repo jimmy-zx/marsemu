@@ -1,18 +1,11 @@
-CFLAGS=-Wall -Wextra -Wpedantic -std=gnu11 -g
-
-client_drawfont: client_drawfont.c ../client/plot.o ../client/psf.o
-	mips-linux-gnu-gcc -static -o $@ $^
-
-%: %.c
-	$(CC) $(CFLAGS) -o $@ $^ -lX11 -lXext
-
-TARGET=shm_putimage xlib_shmimage
-
-all: $(TARGET)
-
-client_drawline: client_drawline.c ../client/plot.o
+BUILDDIR?=.
 
 .PHONY: clean
 
+$(BUILDDIR)/client_drawfont: client_drawfont.c ../build/psf.o ../build/plot.o
+
+$(BUILDDIR)/%: %.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $^ -static
+
 clean:
-	-rm -f $(TARGET)
+	-rm -f $(BUILDDIR)/client_drawfont

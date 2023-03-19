@@ -9,16 +9,20 @@ all: mipsclient server
 
 builddir:
 	-mkdir -p $(BUILDDIR)
-	-mkdir -p $(BUILDDIR)/mips
 
 client: builddir
 	BUILDDIR=../$(BUILDDIR) make -C client
 
 mipsclient: builddir
-	BUILDDIR=../$(BUILDDIR)/mips CC=$(MIPSCC) make -C client
+	BUILDDIR=../$(BUILDDIR) CC=$(MIPSCC) make -C client
 
 server: builddir
 	BUILDDIR=../$(BUILDDIR) make -C server
 
+examples: builddir mipsclient
+	BUILDDIR=../$(BUILDDIR) CC=$(MIPSCC) make -C examples
+
 clean:
 	BUILDDIR=../$(BUILDDIR) make -C client clean
+	BUILDDIR=../$(BUILDDIR) make -C server clean
+	BUILDDIR=../$(BUILDDIR) make -C examples clean

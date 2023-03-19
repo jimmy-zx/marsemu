@@ -33,9 +33,9 @@ void plot_deinit() {
 int plot_draw(uint32_t x, uint32_t y, uint32_t color) {
 #ifndef PLOT_NOCHECK
   if (x >= (uint32_t)kWidth || y >= (uint32_t)kHeight) {
-    return 0;
+    return 1;
   }
 #endif
   *(uint32_t *)(plot_mem + x * kPixelBytes + y * kWidth * kPixelBytes) = color;
-  return 1;
+  return 0;
 }
