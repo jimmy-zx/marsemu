@@ -1,3 +1,5 @@
+/* An example to put SHM image to X11 window */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>

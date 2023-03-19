@@ -1,3 +1,5 @@
+/* An example of using Xlib */
+
 #include <assert.h>
 #include <unistd.h>
 #include <stddef.h>

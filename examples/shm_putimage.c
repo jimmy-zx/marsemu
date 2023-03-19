@@ -1,3 +1,5 @@
+/* An example to put image to SHM memory */
+
 #include <stddef.h>
 #include <stdio.h>
 #include <stdint.h>

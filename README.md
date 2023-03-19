@@ -6,6 +6,7 @@ A project to emulate MARS's bitmap display and keyboard.
 
 - Xlib
 [1](https://handmade.network/forums/articles/t/2834-tutorial_a_tour_through_xlib_and_related_technologies)
+[2](https://tronche.com/gui/x/xlib-tutorial/)
 
 - Xlib MIT-SHM Extension
 [1](https://stackoverflow.com/questions/43442675/how-to-use-xshmgetimage-and-xshmputimage)

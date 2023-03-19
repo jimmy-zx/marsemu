@@ -1,3 +1,5 @@
+/* An example for reading from SHM */
+
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>
@@ -9,7 +11,7 @@
 
 int main() {
   key_t key = ftok("shmfile", 65);
-  int shmid = shmget(key, HEIGHT * WIDTH * sizeof(char), 0666 | IPC_CREAT);
+  int shmid = shmget(key, HEIGHT * WIDTH * sizeof(char), 0666);
   char *buf = (char *) shmat(shmid, NULL, 0);
   printf("%s\n", buf);
   shmdt(buf);

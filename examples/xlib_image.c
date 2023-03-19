@@ -1,3 +1,5 @@
+/* An example for plotting a framebuffer to X11 */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>

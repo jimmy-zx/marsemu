@@ -1,3 +1,5 @@
+/* An example for writing to SHM */
+
 #include <stddef.h>
 #include <string.h>
 #include <sys/ipc.h>
