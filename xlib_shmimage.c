@@ -3,13 +3,14 @@
 #include <stddef.h>
 #include <assert.h>
 #include <unistd.h>
+#include <stdbool.h>
+#include <sys/shm.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/extensions/XShm.h>
 
-const int kDepth = 24;
-const int kPixelBits = 32;
-const int kPixelBytes = 32 / 8;
+#include "xdefs.h"
 
 void setSizeHint(Display *display, Window window, int minWidth, int minHeight, int maxWidth, int maxHeight) {
   XSizeHints hints = {};
@@ -26,32 +27,8 @@ void setSizeHint(Display *display, Window window, int minWidth, int minHeight, i
   XSetWMNormalHints(display, window, &hints);
 }
 
-Status toggleMaximize(Display *display, Window window) {
-  XClientMessageEvent ev = {};
-  Atom wmState = XInternAtom(display, "_NET_WM_STATE", False);
-  Atom maxH = XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
-  Atom maxV = XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_VERT", False);
-
-  if (wmState == None) {
-    return 0;
-  }
-
-  ev.type = ClientMessage;
-  ev.format = 32;
-  ev.window = window;
-  ev.message_type = wmState;
-  ev.data.l[0] = 2;
-  ev.data.l[1] = maxH;
-  ev.data.l[2] = maxV;
-  ev.data.l[3] = 1;
-  return XSendEvent(display, DefaultRootWindow(display), False, SubstructureNotifyMask, (XEvent *) &ev);
-}
-
 int main() {
   // Defines
-  int width = 512;
-  int height = 512;
-  int windowBufferSize = width * height * kPixelBytes;
   Display *display = XOpenDisplay(NULL);
   assert(display);
   int root = DefaultRootWindow(display);
@@ -64,26 +41,31 @@ int main() {
   windowAttr.colormap = XCreateColormap(display, root, visinfo.visual, AllocNone);
   windowAttr.event_mask = StructureNotifyMask | KeyPressMask | KeyReleaseMask;
   unsigned long attributeMask = CWBitGravity | CWBackPixel | CWColormap | CWEventMask;
-  Window window = XCreateWindow(display, root, 0, 0, width, height, 0, visinfo.depth, InputOutput, visinfo.visual, attributeMask, &windowAttr);
+  Window window = XCreateWindow(display, root, 0, 0, kWidth, kHeight, 0, visinfo.depth, InputOutput, visinfo.visual, attributeMask, &windowAttr);
   assert(window);
 
   // Setup
   XStoreName(display, window, "Hello, Window!");
-  // setSizeHint(display, window, width, height, width, height);
+  setSizeHint(display, window, kWidth, kHeight, kWidth, kHeight);
   XMapWindow(display, window);
-  // printf("%d\n", toggleMaximize(display, window));
   XFlush(display);
 
-  char *mem = malloc(windowBufferSize);
-  XImage *xWindowBuffer = XCreateImage(display, visinfo.visual, visinfo.depth, ZPixmap, 0, mem, width, height, kPixelBits, 0);
+  XShmSegmentInfo shminfo;
+  XImage *xWindowBuffer = XShmCreateImage(display, visinfo.visual, visinfo.depth, ZPixmap, 0, &shminfo, kWidth, kHeight);
+  key_t key = ftok("shmfile", 65);
+  shminfo.shmid = shmget(key, xWindowBuffer->bytes_per_line * xWindowBuffer->height, IPC_CREAT | 0660);
+  shminfo.shmaddr = xWindowBuffer->data = shmat(shminfo.shmid, 0, 0);
+  shminfo.readOnly = false;
+  XShmAttach(display, &shminfo);
+
   GC defaultGC = DefaultGC(display, defaultScreen);
 
 
   // Event loop
-  Atom WM_DELETE_WINDOW = XInternAtom(display, "WM_DELETE_WINDOW", False);
+  Atom WM_DELETE_WINDOW = XInternAtom(display, "WM_DELETE_WINDOW", false);
   assert(XSetWMProtocols(display, window, &WM_DELETE_WINDOW, 1));
   int windowOpen = 1;
-  int replot = 1;
+  int shmWait = 0;
   while (windowOpen) {
     XEvent ev;
     while (XPending(display) > 0) {
@@ -108,18 +90,18 @@ int main() {
             }
           }
           break;
-        case ConfigureNotify:
-          {
-            XConfigureEvent *e = (XConfigureEvent *) &ev;
-            width = e->width;
-            height = e->height;
-            XDestroyImage(xWindowBuffer);
-            windowBufferSize = width * height * kPixelBytes;
-            mem = malloc(windowBufferSize);
-            xWindowBuffer = XCreateImage(display, visinfo.visual, visinfo.depth, ZPixmap, 0, mem, width, height, kPixelBits, 0);
-            replot = 1;
-          }
-          break;
+        // case ConfigureNotify:
+        //   {
+        //     XConfigureEvent *e = (XConfigureEvent *) &ev;
+        //     width = e->width;
+        //     height = e->height;
+        //     XDestroyImage(xWindowBuffer);
+        //     windowBufferSize = width * height * kPixelBytes;
+        //     mem = malloc(windowBufferSize);
+        //     xWindowBuffer = XCreateImage(display, visinfo.visual, visinfo.depth, ZPixmap, 0, mem, width, height, kPixelBits, 0);
+        //     replot = 1;
+        //   }
+        //   break;
         case KeyPress:
           {
             XKeyPressedEvent *e = (XKeyPressedEvent *) &ev;
@@ -132,29 +114,24 @@ int main() {
             printf("key %u released\n", e->keycode);
           }
           break;
+        case ShmCompletion:
+          {
+            shmWait = 0;
+          }
+          break;
       }
     }
 
-    if (replot) {
-      int pitch = width * kPixelBytes;
-      for (int y = 0; y < height; y++) {
-        char *row = mem + (y * pitch);
-        for (int x = 0; x < width; x++) {
-          unsigned int *p = (unsigned int *) (row + (x * kPixelBytes));
-          if (x % 16 && y % 16) {
-            *p = 0xffffffff;
-          } else {
-            *p = 0;
-          }
-        }
-      }
-      XPutImage(display, window, defaultGC, xWindowBuffer, 0, 0, 0, 0, width, height);
-      replot = 0;
+    if (windowOpen || !shmWait) {
+      XShmPutImage(display, window, defaultGC, xWindowBuffer, 0, 0, 0, 0, kWidth, kHeight, false);
+      shmWait = 1;
     }
   }
 
+  XShmDetach(display, &shminfo);
   XDestroyImage(xWindowBuffer);
+  shmdt(shminfo.shmaddr);
+  shmctl(shminfo.shmid, IPC_RMID, 0);
   XCloseDisplay(display);
-
   return 0;
 }
