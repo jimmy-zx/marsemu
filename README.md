@@ -2,6 +2,16 @@
 
 A project to emulate MARS's bitmap display and keyboard.
 
+Tested under x86 and qemu-mips.
+
+## Features
+
+- [x] Server: framebuffer
+- [x] Client: plot
+- [x] Client: psf
+- [ ] Server: keyboard
+- [ ] Client: keyboard
+
 ## References:
 
 - Xlib
@@ -14,3 +24,7 @@ A project to emulate MARS's bitmap display and keyboard.
 
 - SHM
 [1](https://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/shm/shmat.html)
+
+- PSF
+[1](https://www.win.tue.nl/~aeb/linux/kbd/font-formats-1.html)
+[2](https://wiki.osdev.org/PC_Screen_Font)
