@@ -2,9 +2,12 @@ BUILDDIR?=.
 
 .PHONY: clean
 
-$(BUILDDIR)/client_drawfont: client_drawfont.c ../build/psf.o ../build/plot.o
+all: $(BUILDDIR)/client_drawfont $(BUILDDIR)/client_drawbox
 
-$(BUILDDIR)/%: %.c
+$(BUILDDIR)/client_drawfont: client/client_drawfont.c ../build/psf.o ../build/plot.o
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $^ -static
+
+$(BUILDDIR)/client_drawbox: client/client_drawbox.s ../build/plot.o
 	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $^ -static
 
 clean:

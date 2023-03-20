@@ -9,8 +9,10 @@ Tested under x86 and qemu-mips.
 - [x] Server: framebuffer
 - [x] Client: plot
 - [x] Client: psf
+- [ ] Documentation
 - [ ] Server: keyboard
 - [ ] Client: keyboard
+- [ ] ASM Examples
 
 ## Architecture
 

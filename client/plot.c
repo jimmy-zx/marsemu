@@ -21,6 +21,9 @@ int plot_init() {
     perror("shmat");
     return 1;
   }
+#ifdef PLOT_DEBUG
+  fprintf(stderr, "Initialized plot\n");
+#endif
   return 0;
 }
 

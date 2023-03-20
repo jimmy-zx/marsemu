@@ -1,4 +1,4 @@
-#include "../client/plot.h"
+#include "../../client/plot.h"
 
 int main() {
   if (plotinit() != 0) {
