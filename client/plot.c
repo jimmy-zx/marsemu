@@ -1,9 +1,9 @@
 #include <stddef.h>
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <sys/ipc.h>
-#include <sys/types.h>
 #include <sys/shm.h>
+#include <sys/types.h>
 
 #include "../xdefs.h"
 #include "plot.h"
@@ -38,6 +38,10 @@ int plot_draw(uint32_t x, uint32_t y, uint32_t color) {
   if (x >= (uint32_t)kWidth || y >= (uint32_t)kHeight) {
     return 1;
   }
+#endif
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  color = ((color >> 24) & 0xff) | ((color << 8) & 0xff0000) |
+          ((color >> 8) & 0xff00) | ((color << 24) & 0xff000000);
 #endif
   *(uint32_t *)(plot_mem + x * kPixelBytes + y * kWidth * kPixelBytes) = color;
   return 0;
