@@ -4,15 +4,26 @@ A project to emulate MARS's bitmap display and keyboard.
 
 Tested under x86 and qemu-mips.
 
+## Quick start
+
+```bash
+git clone https://github.com/jimmy-zx/marsemu.git
+cd marsemu
+make
+make examples
+./build/server &
+./build/client_drawfont
+```
+
 ## Features
 
-- [x] Server: framebuffer
-- [x] Client: plot
-- [x] Client: psf
-- [ ] Documentation
-- [ ] Server: keyboard
-- [ ] Client: keyboard
-- [ ] ASM Examples
+### Server
+- Virtual Framebuffer
+- [ ] Keyboard
+
+### Client
+- [plot](/blob/main/client/plot.h): draw pixels directly
+- [psf](/blob/main/client/psf.h): draw letters using PSF fonts
 
 ## Architecture
 
