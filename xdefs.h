@@ -4,8 +4,8 @@
 const int kDepth = 24;
 const int kPixelBits = 32;
 const int kPixelBytes = 32 / 8;
-const int kWidth = 512;
-const int kHeight = 512;
+const int kWidth = 256;
+const int kHeight = 256;
 const int kWindowBufferSize = kWidth * kHeight * kPixelBytes;
 const long kBillion = 1000000000L;
 const long kSleepNS = 10000000L;
