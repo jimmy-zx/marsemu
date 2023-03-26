@@ -11,7 +11,7 @@
 #define kSleepNS 10000000L
 
 #define SHM_PROJID 65
-#define SHM_KBDPATH "marsemu_kbd"
-#define SHM_VFBPATH "marsemu_vfb"
+#define SHM_KBDPATH "/tmp/marsemu_kbd"
+#define SHM_VFBPATH "/tmp/marsemu_vfb"
 
 #endif  // XDEFS_H_
