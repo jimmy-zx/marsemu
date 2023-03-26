@@ -13,7 +13,7 @@ Top of stack
 +----------------+ <- 0($fp), 0($sp)
 ```
 
-The stack size is at least $$(2*4 + 4*4) = 24$$.
+The stack size is at least 24.
 
 - Example:
 ```asm
@@ -30,6 +30,8 @@ func:
     addi    $sp,$sp,24    # restore $sp
     ja      $ra           # return
 ```
+
+See [inc.s](/examples/asm/inc.s)
 
 ## References
 - [1](https://www.cs.purdue.edu/homes/hosking/502/spim/node23.html)
