@@ -12,7 +12,11 @@ static int shmid;
 char *kbd_mem = NULL;
 
 int kbd_init() {
-  key_t key = ftok(SHM_KEYPATH, SHM_KBDKEYID);
+  key_t key = ftok(SHM_KBDPATH, SHM_PROJID);
+  if (key == -1) {
+    perror("ftok");
+    return 1;
+  }
   if ((shmid = shmget(key, 2 * sizeof(char), 0660)) < 0) {
     perror("shmget");
     return 1;

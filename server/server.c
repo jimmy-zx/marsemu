@@ -56,8 +56,11 @@ void setSizeHint(int minWidth, int minHeight, int maxWidth, int maxHeight) {
 int main() {
   signal(SIGINT, sigint_handler);
   XShmSegmentInfo shminfo;
-  key_t fbkey = ftok(SHM_KEYPATH, SHM_FBKEYID);
-  key_t kbdkey = ftok(SHM_KEYPATH, SHM_KBDKEYID);
+  key_t fbkey = ftok(SHM_VFBPATH, SHM_PROJID);
+  assert(fbkey != -1);
+  key_t kbdkey = ftok(SHM_KBDPATH, SHM_PROJID);
+  assert(kbdkey != -1);
+  printf("%llx %llx\n", (long long) fbkey, (long long) kbdkey);
 
   // Defines
   display = XOpenDisplay(NULL);
@@ -85,13 +88,17 @@ int main() {
   // Setup the framebuffer
   xWindowBuffer = XShmCreateImage(display, visinfo.visual, visinfo.depth, ZPixmap, 0, &shminfo, kWidth, kHeight);
   shminfo.shmid = shmget(fbkey, xWindowBuffer->bytes_per_line * xWindowBuffer->height, IPC_CREAT | 0660);
+  assert(shminfo.shmid != -1);
   shminfo.shmaddr = xWindowBuffer->data = shmat(shminfo.shmid, 0, 0);
+  assert(shminfo.shmaddr != (void *)-1);
   shminfo.readOnly = false;
   XShmAttach(display, &shminfo);
 
   // Setup the keyboard buffer
   int kbdshmid = shmget(kbdkey, 2 * sizeof(char), IPC_CREAT | 0660);
+  assert(kbdshmid != -1);
   char *kbdbuf = shmat(kbdshmid, 0, 0);
+  assert(kbdbuf != (void *)-1);
   kbdbuf[0] = 0;
   kbdbuf[1] = 0;
 

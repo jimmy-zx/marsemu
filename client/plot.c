@@ -12,7 +12,15 @@ static int shmid;
 char *plot_mem = NULL;
 
 int plot_init() {
-  key_t key = ftok(SHM_KEYPATH, SHM_FBKEYID);
+  key_t key = ftok(SHM_VFBPATH, SHM_PROJID);
+  if (key == -1) {
+    perror("ftok");
+    return 1;
+  }
+#ifdef PLOT_DEBUG
+  printf("%llx\n", (long long)key);
+  printf("%llx\n", (long long)kWindowBufferSize);
+#endif
   if ((shmid = shmget(key, kWindowBufferSize, 0660)) < 0) {
     perror("shmget");
     return 1;
