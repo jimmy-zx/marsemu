@@ -29,4 +29,6 @@ void plot_deinit();
  */
 int plot_draw(uint32_t x, uint32_t y, uint32_t color);
 
+uint32_t plot_get(uint32_t x, uint32_t y);
+
 #endif  // PLOT_H_

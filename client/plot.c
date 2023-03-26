@@ -45,6 +45,9 @@ void plot_deinit() {
 int plot_draw(uint32_t x, uint32_t y, uint32_t color) {
 #ifndef PLOT_NOCHECK
   if (x >= (uint32_t)kWidth || y >= (uint32_t)kHeight) {
+#ifdef PLOT_DEBUG
+    fprintf(stderr, "plot: out of bound: (%" PRIu32 ", %" PRIu32 ")=%" PRIx32 "\n",x, y, color);
+#endif
     return 1;
   }
 #endif
@@ -57,4 +60,8 @@ int plot_draw(uint32_t x, uint32_t y, uint32_t color) {
 #endif
   *(uint32_t *)(plot_mem + x * kPixelBytes + y * kWidth * kPixelBytes) = color;
   return 0;
+}
+
+uint32_t plot_get(uint32_t x, uint32_t y) {
+  return *(uint32_t *)(plot_mem + x * kPixelBytes + y * kWidth * kPixelBytes);
 }
