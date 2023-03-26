@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include <signal.h>
 #include <sys/shm.h>
+#include <ctype.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -139,18 +140,21 @@ int main() {
           break;
         case KeyPress:
           {
-            XKeyPressedEvent *e = (XKeyPressedEvent *) &ev;
-            printf("key %u pressed\n", e->keycode);
+            KeySym sym = XLookupKeysym(&ev.xkey, 0);
+            if (isprint(sym)) {
+              printf("key %c pressed\n", (char)sym);
+            } else {
+              printf("key %u pressed\n", (unsigned)sym);
+            }
             kbdbuf[0] = 1;
-            kbdbuf[1] = e->keycode;
+            kbdbuf[1] = sym;
           }
           break;
         case KeyRelease:
           {
-            XKeyReleasedEvent *e = (XKeyReleasedEvent *) &ev;
-            printf("key %u released\n", e->keycode);
+            // XKeyReleasedEvent *e = (XKeyReleasedEvent *) &ev;
+            printf("key released\n");
             kbdbuf[0] = 0;
-            kbdbuf[1] = e->keycode;
           }
           break;
         case ShmCompletion:
