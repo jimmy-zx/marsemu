@@ -1,5 +1,5 @@
 BUILDDIR?=.
-OBJS=$(BUILDDIR)/plot.o $(BUILDDIR)/psf.o
+OBJS=$(BUILDDIR)/plot.o $(BUILDDIR)/psf.o $(BUILDDIR)/kbd.o
 
 .PHONY: clean
 
@@ -8,8 +8,8 @@ all: $(OBJS)
 echo:
 	echo $BUILDDIR
 
-$(BUILDDIR)/%.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $^
+$(BUILDDIR)/%.o: %.c ../xdefs.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
 
 clean:
 	-rm -f $(OBJS)

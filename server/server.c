@@ -56,7 +56,8 @@ void setSizeHint(int minWidth, int minHeight, int maxWidth, int maxHeight) {
 int main() {
   signal(SIGINT, sigint_handler);
   XShmSegmentInfo shminfo;
-  key_t key = ftok(MEM_KEYPATH, MEM_KEYID);
+  key_t fbkey = ftok(SHM_KEYPATH, SHM_FBKEYID);
+  key_t kbdkey = ftok(SHM_KEYPATH, SHM_KBDKEYID);
 
   // Defines
   display = XOpenDisplay(NULL);
@@ -83,10 +84,16 @@ int main() {
 
   // Setup the framebuffer
   xWindowBuffer = XShmCreateImage(display, visinfo.visual, visinfo.depth, ZPixmap, 0, &shminfo, kWidth, kHeight);
-  shminfo.shmid = shmget(key, xWindowBuffer->bytes_per_line * xWindowBuffer->height, IPC_CREAT | 0660);
+  shminfo.shmid = shmget(fbkey, xWindowBuffer->bytes_per_line * xWindowBuffer->height, IPC_CREAT | 0660);
   shminfo.shmaddr = xWindowBuffer->data = shmat(shminfo.shmid, 0, 0);
   shminfo.readOnly = false;
   XShmAttach(display, &shminfo);
+
+  // Setup the keyboard buffer
+  int kbdshmid = shmget(kbdkey, 2 * sizeof(char), IPC_CREAT | 0660);
+  char *kbdbuf = shmat(kbdshmid, 0, 0);
+  kbdbuf[0] = 0;
+  kbdbuf[1] = 0;
 
   // Event loop
   int shmWait = 0;
@@ -127,12 +134,16 @@ int main() {
           {
             XKeyPressedEvent *e = (XKeyPressedEvent *) &ev;
             printf("key %u pressed\n", e->keycode);
+            kbdbuf[0] = 1;
+            kbdbuf[1] = e->keycode;
           }
           break;
         case KeyRelease:
           {
             XKeyReleasedEvent *e = (XKeyReleasedEvent *) &ev;
             printf("key %u released\n", e->keycode);
+            kbdbuf[0] = 0;
+            kbdbuf[1] = e->keycode;
           }
           break;
         case ShmCompletion:
@@ -170,6 +181,8 @@ int main() {
   printf("Shutting down\n");
   XShmDetach(display, &shminfo);
   XDestroyImage(xWindowBuffer);
+  shmdt(kbdbuf);
+  shmctl(kbdshmid, IPC_RMID, 0);
   shmdt(shminfo.shmaddr);
   shmctl(shminfo.shmid, IPC_RMID, 0);
   XCloseDisplay(display);

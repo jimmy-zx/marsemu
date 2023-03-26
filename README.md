@@ -19,11 +19,12 @@ make examples
 
 ### Server
 - Virtual Framebuffer
-- [ ] Keyboard
+- Keyboard
 
 ### Client
 - [plot](/client/plot.h): draw pixels directly
 - [psf](/client/psf.h): draw letters using PSF fonts
+- [kbd](/client/kbd.h): get keyboard input
 
 ## Architecture
 

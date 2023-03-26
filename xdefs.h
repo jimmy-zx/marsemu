@@ -10,7 +10,8 @@ const int kWindowBufferSize = kWidth * kHeight * kPixelBytes;
 const long kBillion = 1000000000L;
 const long kSleepNS = 10000000L;
 
-#define MEM_KEYPATH "marsemu"
-#define MEM_KEYID 65
+#define SHM_KEYPATH "marsemu"
+#define SHM_FBKEYID 65
+#define SHM_KBDKEYID 66
 
 #endif  // XDEFS_H_

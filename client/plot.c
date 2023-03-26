@@ -12,8 +12,8 @@ static int shmid;
 char *plot_mem = NULL;
 
 int plot_init() {
-  key_t key = ftok(MEM_KEYPATH, MEM_KEYID);
-  if ((shmid = shmget(key, kWindowBufferSize, 0666)) < 0) {
+  key_t key = ftok(SHM_KEYPATH, SHM_FBKEYID);
+  if ((shmid = shmget(key, kWindowBufferSize, 0660)) < 0) {
     perror("shmget");
     return 1;
   }
