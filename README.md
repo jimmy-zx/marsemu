@@ -20,7 +20,7 @@ make examples
 All of the dependencies can be installed via `apt`.
 
 - `gcc`
-- `gcc-mips-linux-gcc`
+- `gcc-mips-linux-gnu`
 - `libx11-dev`
 
 ## System Requirements
