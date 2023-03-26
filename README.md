@@ -15,6 +15,27 @@ make examples
 ./build/client_drawfont
 ```
 
+## Dependencies
+
+All of the dependencies can be installed via `apt`.
+
+- `gcc`
+- `gcc-mips-linux-gcc`
+- `libx11-dev`
+
+## System Requirements
+
+Host: `x86`
+
+A X11 server with MIT-SHM support. (The server and client must run on the same host.)
+
+Emulation:
+- `qemu-system-mips`
+- `qemu-user`
+
+Debugging
+- `gdb-multiarch`
+
 ## Features
 
 ### Server
