@@ -22,8 +22,8 @@ make examples
 - [ ] Keyboard
 
 ### Client
-- [plot](/blob/main/client/plot.h): draw pixels directly
-- [psf](/blob/main/client/psf.h): draw letters using PSF fonts
+- [plot](/client/plot.h): draw pixels directly
+- [psf](/client/psf.h): draw letters using PSF fonts
 
 ## Architecture
 
