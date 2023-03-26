@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <inttypes.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/types.h>
@@ -46,6 +47,9 @@ int plot_draw(uint32_t x, uint32_t y, uint32_t color) {
   if (x >= (uint32_t)kWidth || y >= (uint32_t)kHeight) {
     return 1;
   }
+#endif
+#ifdef PLOT_DEBUG
+  fprintf(stderr, "(%" PRIu32 ", %" PRIu32 ")=%" PRIx32 "\n",x, y, color);
 #endif
 #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
   color = ((color >> 24) & 0xff) | ((color << 8) & 0xff0000) |
