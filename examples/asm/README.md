@@ -33,6 +33,22 @@ func:
 
 See [inc.s](/examples/asm/inc.s)
 
+## Macros
+
+GNU AS:
+```
+.macro (name)
+...
+.endm
+```
+
+MARS:
+```
+.macro (name)
+...
+.end_macro
+```
+
 ## References
 - [1](https://www.cs.purdue.edu/homes/hosking/502/spim/node23.html)
 - [2](https://refspecs.linuxfoundation.org/elf/mipsabi.pdf)
