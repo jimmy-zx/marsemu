@@ -1,4 +1,4 @@
-CFLAGS?=-std=gnu11 -Wall -Wpedantic -Wextra -g
+CFLAGS?=-std=gnu11 -Wall -Wpedantic -Wextra -g -DPLOT_DEBUG
 export
 BUILDDIR?=build
 MIPSCC=mips-linux-gnu-gcc
