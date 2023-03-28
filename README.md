@@ -11,9 +11,11 @@ git clone https://github.com/jimmy-zx/marsemu.git
 cd marsemu
 make
 make examples
-./build/server &
-./build/client_drawfont
+./build/server &  # or run in another terminal
+./build/client_drawcorner
 ```
+
+The source file is located at [client\_drawcorner.s](/examples/client/client_drawcorner.s).
 
 ## Dependencies
 
