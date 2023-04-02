@@ -2,6 +2,7 @@
 #define PSF_H_
 
 #include <stdint.h>
+#include <stdio.h>
 
 #define PSF1_MAGIC0     0x36
 #define PSF1_MAGIC1     0x04
@@ -46,5 +47,8 @@ void psf_deinit();
  * @return      0 if the character has been successfully drawn, otherwise 1
  */
 int psf_drawfont(uint16_t ch, uint32_t x, uint32_t y, uint32_t color);
+
+uint8_t *psf_getglyph(uint16_t ch);
+void psf_printfont(uint16_t ch, FILE *stream);
 
 #endif  // PSF_H_

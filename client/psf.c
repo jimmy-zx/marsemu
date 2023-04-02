@@ -95,9 +95,34 @@ void psf_deinit() {
   }
 }
 
-int psf_drawfont(uint16_t ch, uint32_t x, uint32_t y, uint32_t color) {
+uint8_t *psf_getglyph(uint16_t ch) {
   uint16_t charloc = (psf_unicode == NULL) ? ch : psf_unicode[ch];
-  uint8_t *glyph = (uint8_t *)((char *)psf_font + sizeof(struct psf1_header) + charloc * psf_font->charsize);
+  return (uint8_t *)((char *)psf_font + sizeof(struct psf1_header) + charloc * psf_font->charsize);
+}
+
+void psf_printfont(uint16_t ch, FILE *stream) {
+  uint8_t *glyph = psf_getglyph(ch);
+  for (int dy = 0; dy < psf_font->charsize; dy++) {
+    for (int dx = 0; dx < 8; dx++) {
+      int present;
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+      present = (*glyph) & (1 << dx);
+#else
+      present = (*glyph) & (1 << (7 - dx));
+#endif
+      if (present) {
+        fputc('*', stream);
+      } else {
+        fputc(' ', stream);
+      }
+    }
+    fputc('\n', stream);
+    glyph++;
+  }
+}
+
+int psf_drawfont(uint16_t ch, uint32_t x, uint32_t y, uint32_t color) {
+  uint8_t *glyph = psf_getglyph(ch);
   // a glyph consists of (charsize)x8
   for (int dy = 0; dy < psf_font->charsize; dy++) {
     for (int dx = 0; dx < 8; dx++) {
@@ -107,20 +132,10 @@ int psf_drawfont(uint16_t ch, uint32_t x, uint32_t y, uint32_t color) {
 #else
       present = (*glyph) & (1 << (7 - dx));
 #endif
-#ifdef PSF_DEBUG
-      if (present) {
-        fputc('*', stderr);
-      } else {
-        fputc(' ', stderr);
-      }
-#endif
       if (plot_draw(x + dx, y + dy, present ? color : 0x0) != 0) {
         return 1;
       }
     }
-#ifdef PSF_DEBUG
-    fputc('\n', stderr);
-#endif
     glyph++;
   }
   return 0;

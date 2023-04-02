@@ -3,7 +3,7 @@ export
 BUILDDIR?=build
 MIPSCC=mips-linux-gnu-gcc
 
-.PHONY: client mipsclient server builddir
+.PHONY: client mipsclient server builddir utils
 
 all: mipsclient server
 
@@ -15,6 +15,9 @@ client: builddir
 
 mipsclient: builddir
 	BUILDDIR=../$(BUILDDIR) CC=$(MIPSCC) make -C client
+
+utils: builddir
+	BUILDDIR=../$(BUILDDIR) CC=$(MIPSCC) make -C utils
 
 server: builddir
 	BUILDDIR=../$(BUILDDIR) make -C server
