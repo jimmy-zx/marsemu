@@ -38,7 +38,7 @@ int psf_init(const char *psffile);
 void psf_deinit();
 
 /**
- * Draw a character to the framebuffer
+ * Draw a character to the framebuffer.
  *
  * @param ch    the unicode representation of the character
  * @param x     the x-coordinate of the top-left corner
@@ -48,7 +48,14 @@ void psf_deinit();
  */
 int psf_drawfont(uint16_t ch, uint32_t x, uint32_t y, uint32_t color);
 
+/**
+ * Returns the memory address of the PSF glyph.
+ */
 uint8_t *psf_getglyph(uint16_t ch);
+
+/**
+ * Prints a character into stream.
+ */
 void psf_printfont(uint16_t ch, FILE *stream);
 
 #endif  // PSF_H_
