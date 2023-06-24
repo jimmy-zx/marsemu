@@ -1,6 +1,8 @@
 # MARSEMU
 
-A project to emulate MARS's bitmap display and keyboard.
+X11 virtual framebuffer with keyboard input for cross-debugging.
+
+A project to emulate [MARS](https://courses.missouristate.edu/kenvollmar/mars/)'s bitmap display and keyboard.
 
 Tested under x86 and qemu-mips.
 
@@ -17,13 +19,17 @@ make examples
 
 The source file is located at [client\_drawcorner.s](/examples/client/client_drawcorner.s).
 
-## Dependencies
-
-All of the dependencies can be installed via `apt`.
+## Library Dependencies
 
 - `gcc`
 - `gcc-mips-linux-gnu`
 - `libx11-dev`
+- `libxext-dev`
+
+All of the dependencies can be installed via `apt`:
+```bash
+sudo apt install build-essential gcc-mips-linux-gnu libx11-dev libxext-dev
+```
 
 ## System Requirements
 
@@ -37,6 +43,12 @@ Emulation:
 
 Debugging
 - `gdb-multiarch`
+
+### Notes
+
+- `ssh -X` won't be supported (see [here](https://unix.stackexchange.com/questions/534314/working-with-the-mit-shm-x11-extension-on-linux))
+
+- Users using WSL: use WSLg instead
 
 ## Features
 
@@ -59,7 +71,7 @@ Debugging
                                             | +------------------------+ |
                                             |            ||              |
                                             | +------------------------+ |
-                                            | | MIPS Program           | |
+                                            | | Userspace MIPS Program | |
                                             | +------------------------+ |
                                             +----------------------------+
 
