@@ -17,9 +17,7 @@ make examples
 ./build/client_drawcorner
 ```
 
-The source file is located at [client\_drawcorner.s](/examples/client/client_drawcorner.s).
-
-## Library Dependencies
+## Dependencies
 
 - `gcc`
 - `gcc-mips-linux-gnu`
@@ -60,6 +58,14 @@ Debugging
 - [plot](/client/plot.h): draw pixels directly
 - [psf](/client/psf.h): draw letters using PSF fonts
 - [kbd](/client/kbd.h): get keyboard input
+
+## Usage
+
+Example usage using MIPS asm: [client\_drawcorner.s](/examples/client/client_drawcorner.s).
+Compilation instructions: [Makefile](/examples/Makefile)
+
+Calling conventions: follow [System V MIPS ABI](https://refspecs.linuxfoundation.org/elf/mipsabi.pdf).
+This [folder](/examples/asm) provides some examples and a macro.
 
 ## Architecture
 
