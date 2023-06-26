@@ -1,46 +1,41 @@
-.macro	fprol
-	addiu	$sp,$sp,-24	# allocate a minimal stack (16+2*4)
-	sw	$ra,20($sp)
-	sw	$fp,16($sp)
+.macro	fprol ssize=24
+	addiu	$sp,$sp,-\ssize
+	sw	$a3,\ssize+12($sp)
+	sw	$a2,\ssize+8($sp)
+	sw	$a1,\ssize+4($sp)
+	sw	$a0,\ssize+0($sp)
+	sw	$ra,\ssize-4($sp)
+	sw	$fp,\ssize-8($sp)
 	move	$fp,$sp
-	sw	$a3,36($sp)	# save $a*
-	sw	$a2,32($sp)
-	sw	$a1,28($sp)
-	sw	$a0,24($sp)
 .endm
 
-.macro	fepil
+.macro	fepil ssize=24
 	move	$sp,$fp
-	lw	$ra,20($sp)
-	lw	$fp,16($sp)
-	addiu	$sp,$sp,24
+	lw	$ra,\ssize-4($sp)
+	lw	$fp,\ssize-8($sp)
+	addiu	$sp,$sp,\ssize
 .endm
 
-.macro	savesr
-	addiu	$sp,$sp,32	# allocate stack for $s* (8*4)
-	move	$fp,$sp
-	sw	$s7,44($sp)
-	sw	$s6,40($sp)
-	sw	$s5,36($sp)
-	sw	$s4,32($sp)
-	sw	$s3,28($sp)
-	sw	$s2,24($sp)
-	sw	$s1,20($sp)
-	sw	$s0,16($sp)
+.macro	savesr ssize
+	sw	$s7,\ssize-12($sp)
+	sw	$s6,\ssize-16($sp)
+	sw	$s5,\ssize-20($sp)
+	sw	$s4,\ssize-24($sp)
+	sw	$s3,\ssize-28($sp)
+	sw	$s2,\ssize-32($sp)
+	sw	$s1,\ssize-36($sp)
+	sw	$s0,\ssize-40($sp)
 .endm
 
-.macro	loadsr
-	lw	$s7,44($sp)
-	lw	$s6,40($sp)
-	lw	$s5,36($sp)
-	lw	$s4,32($sp)
-	lw	$s3,28($sp)
-	lw	$s2,24($sp)
-	lw	$s1,20($sp)
-	lw	$s0,16($sp)
-	addiu	$sp,$sp,-32
-	move	$fp,$sp
+.macro	loadsr ssize
+	lw	$s7,\ssize-12($sp)
+	lw	$s6,\ssize-16($sp)
+	lw	$s5,\ssize-20($sp)
+	lw	$s4,\ssize-24($sp)
+	lw	$s3,\ssize-28($sp)
+	lw	$s2,\ssize-32($sp)
+	lw	$s1,\ssize-36($sp)
+	lw	$s0,\ssize-40($sp)
 .endm
 
-
-# vim: set noet ts=16 sts=16 sw=16:
+# vim: set noet ts=8 sts=8 sw=8:
