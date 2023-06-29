@@ -83,7 +83,14 @@ This [folder](/examples/asm) provides some examples and a macro.
 
 ```
 
-## References:
+## Portability
+
+### MARS MIPS
+
+- MARS does not support several derivatives used by GNU as.
+A simple [preprocessor](/utils/asmpp.py) is provided to assess some of these.
+
+## References
 
 - Xlib
 [1](https://handmade.network/forums/articles/t/2834-tutorial_a_tour_through_xlib_and_related_technologies)
