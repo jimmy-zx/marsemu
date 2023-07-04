@@ -48,6 +48,8 @@ Debugging
 
 - Users using WSL: use WSLg instead
 
+- Scaling is not natively supported. You can use [run\_scaled](https://github.com/kaueraal/run_scaled) on X11 or `magnify.exe` on Windows.
+
 ## Features
 
 ### Server
