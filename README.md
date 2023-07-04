@@ -42,14 +42,6 @@ Emulation:
 Debugging
 - `gdb-multiarch`
 
-### Notes
-
-- `ssh -X` won't be supported (see [here](https://unix.stackexchange.com/questions/534314/working-with-the-mit-shm-x11-extension-on-linux))
-
-- Users using WSL: use WSLg instead
-
-- Scaling is not natively supported. You can use [run\_scaled](https://github.com/kaueraal/run_scaled) on X11 or `magnify.exe` on Windows.
-
 ## Features
 
 ### Server
@@ -67,7 +59,7 @@ Example usage using MIPS asm: [client\_drawcorner.s](/examples/client/client_dra
 Compilation instructions: [Makefile](/examples/Makefile)
 
 Calling conventions: follow [System V MIPS ABI](https://refspecs.linuxfoundation.org/elf/mipsabi.pdf).
-This [folder](/examples/asm) provides some examples and a macro.
+This [folder](/examples/asm) provides some examples and a macro to help you setup the stack frame.
 
 ## Architecture
 
@@ -85,26 +77,32 @@ This [folder](/examples/asm) provides some examples and a macro.
 
 ```
 
-## Portability
+## Notes
 
-### MARS MIPS
+- `ssh -X` will not be supported (see [here](https://unix.stackexchange.com/questions/534314/working-with-the-mit-shm-x11-extension-on-linux))
+
+- Users using WSL: use WSLg instead
+
+- Scaling is not natively supported. You can use [run\_scaled](https://github.com/kaueraal/run_scaled) on X11 or `magnify.exe` on Windows.
+
+### Porting to MARS
 
 - MARS does not support several derivatives used by GNU as.
 A simple [preprocessor](/utils/asmpp.py) is provided to assess some of these.
 
-## References
+## Related Resources
 
-- Xlib
-[1](https://handmade.network/forums/articles/t/2834-tutorial_a_tour_through_xlib_and_related_technologies)
-[2](https://tronche.com/gui/x/xlib-tutorial/)
+### Xlib
+[A tutorial](https://handmade.network/forums/articles/t/2834-tutorial_a_tour_through_xlib_and_related_technologies)
+[Another tutorial](https://tronche.com/gui/x/xlib-tutorial/)
 
-- Xlib MIT-SHM Extension
-[1](https://stackoverflow.com/questions/43442675/how-to-use-xshmgetimage-and-xshmputimage)
-[2](https://stackoverflow.com/questions/34176795/any-efficient-way-of-converting-ximage-data-to-pixel-map-e-g-array-of-rgb-quad)
+### Xlib MIT-SHM Extension
+[xshmXXXimage()](https://stackoverflow.com/questions/43442675/how-to-use-xshmgetimage-and-xshmputimage)
+[Design choice](https://stackoverflow.com/questions/34176795/any-efficient-way-of-converting-ximage-data-to-pixel-map-e-g-array-of-rgb-quad)
 
-- SHM
-[1](https://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/shm/shmat.html)
+### SHM
+[shmat() system call](https://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/shm/shmat.html)
 
-- PSF
-[1](https://www.win.tue.nl/~aeb/linux/kbd/font-formats-1.html)
-[2](https://wiki.osdev.org/PC_Screen_Font)
+### PSF
+[PC Screen Font Specification](https://www.win.tue.nl/~aeb/linux/kbd/font-formats-1.html)
+[Guide from osdev.org](https://wiki.osdev.org/PC_Screen_Font)
